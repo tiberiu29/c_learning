@@ -10,7 +10,6 @@ void tearDown() {
 }
 
 void test_initialize_empty_array_list(void) {
-
 }
 
 int main(void) {

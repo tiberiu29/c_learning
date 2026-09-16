@@ -1,0 +1,4 @@
+CompileFlags:
+  Add:
+    - -I/workspace/dynamic-array/src
+    - -I/workspace/dynamic-array/unity
