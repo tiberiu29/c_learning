@@ -22,7 +22,7 @@ int pop(ArrayList *array_list);
 
 void add(ArrayList *array_list, size_t index, int value);
 
-void remove_at(ArrayList *array_list, size_t index);
+int remove_at(ArrayList *array_list, size_t index);
 
 void destroy(ArrayList *array_list);
 

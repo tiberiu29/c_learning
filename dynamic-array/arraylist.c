@@ -62,14 +62,8 @@ void push(ArrayList *array_list, int number) {
 }
 
 int pop(ArrayList *array_list) {
-    if(array_list->size == 0) {
-        return -1;
-    }
-
     int index = array_list->size - 1;
-    int value_stored = get(array_list, index);
-    array_list->size = array_list->size - 1;
-    return value_stored;
+    return remove_at(array_list, index);
 }
 
 // I could have used memmove, but for learning purposes I did it manually
@@ -98,13 +92,14 @@ void add(ArrayList *array_list, size_t index, int value) {
     array_list->size = array_list->size + 1;
 }
 
-void remove_at(ArrayList *array_list, size_t index) {
+int remove_at(ArrayList *array_list, size_t index) {
     if(index >= array_list->size) {
         printf("Index out of bounds");
         exit(1);
     }
 
     size_t starting_index = index;
+    int value_stored = get(array_list, starting_index);
 
     while(starting_index < array_list ->size - 1) {
        array_list->data[starting_index] = 
@@ -114,6 +109,7 @@ void remove_at(ArrayList *array_list, size_t index) {
     }
     
     array_list->size = array_list->size - 1;
+    return value_stored;
 }
 
 void destroy(ArrayList *array_list) {
