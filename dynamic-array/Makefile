@@ -1,8 +1,16 @@
+.PHONY: test clean
+
 CC=gcc
 CFLAGS=-Wall -Wextra -Wpedantic -g
+INCLUDES= -Isrc -Iunity
 
-main:
-	$(CC) $(CFLAGS) *.c -o main
+test:
+	$(CC) $(CFLAGS) $(INCLUDES) \
+		src/arraylist.c \
+		unity/unity.c \
+		test/test_arraylist.c \
+		-o test_arraylist
+	./test_arraylist
 
 clean:
-	rm -f main
+	rm -f test_arraylist
