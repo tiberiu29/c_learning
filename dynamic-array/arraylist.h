@@ -9,13 +9,17 @@ typedef struct {
     size_t capacity;
 }ArrayList;
 
-int get(ArrayList *array_list, size_t index);
 
 ArrayList *initialize(size_t initial_capacity);
+
+int get(ArrayList *array_list, size_t index);
 
 void push(ArrayList *array_list, int number);
 
 int pop(ArrayList *array_list);
 
+void add(ArrayList *array_list, size_t index, int value);
+
 void destroy(ArrayList *array_list);
+
 #endif 

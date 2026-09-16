@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Wpedantic
+CFLAGS=-Wall -Wextra -Wpedantic -g
 
 main:
 	$(CC) $(CFLAGS) *.c -o main
 
 clean:
-	rm -rf main
+	rm -f main

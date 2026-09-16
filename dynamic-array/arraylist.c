@@ -2,13 +2,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int get(ArrayList *array_list, size_t index) {
-    if(index >=  array_list->size) {
-        printf("Index out of bounds");
+void extend_capacity(ArrayList *array_list) {
+    size_t current_capacity_int = array_list->capacity;
+    size_t current_capacity_bytes =  current_capacity_int * sizeof(int);
+
+    int* realloc_data = 
+        realloc(array_list->data, current_capacity_bytes * 2 );
+
+    if(realloc_data == NULL) {
+        printf("Could not reallocate array for size increase");
         exit(1);
     }
 
-    return array_list->data[index];
+    array_list->data = realloc_data;
+    array_list->capacity = current_capacity_int * 2;
 }
 
 ArrayList *initialize(size_t initial_capacity) {
@@ -35,27 +42,17 @@ ArrayList *initialize(size_t initial_capacity) {
     
 }
 
-void push(ArrayList *array_list, int number) {
-    if(array_list->size == array_list->capacity) {
-        size_t current_capacity_int = array_list->capacity;
-        size_t current_capacity_bytes =  current_capacity_int * sizeof(int);
-
-        int* realloc_data = 
-            realloc(array_list->data, current_capacity_bytes * 2 );
-
-        if(realloc_data == NULL) {
-            printf("Could not reallocate array for size increase");
-            exit(1);
-        }
-    
-        array_list->data = realloc_data;
-        array_list->capacity = current_capacity_int * 2;
+int get(ArrayList *array_list, size_t index) {
+    if(index >=  array_list->size) {
+        printf("Index out of bounds");
+        exit(1);
     }
 
-    size_t new_size = array_list->size + 1;
+    return array_list->data[index];
+}
 
-    array_list->data[new_size - 1] = number;
-    array_list->size = new_size;
+void push(ArrayList *array_list, int number) {
+    add(array_list, array_list->size,  number);
 }
 
 int pop(ArrayList *array_list) {
@@ -67,6 +64,32 @@ int pop(ArrayList *array_list) {
     int value_stored = get(array_list, index);
     array_list->size = array_list->size - 1;
     return value_stored;
+}
+
+// I could have used memmove, but for learning purposes I did it manually
+void add(ArrayList *array_list, size_t index, int value) {
+    // we can also append at the end of array
+    // similar to a push, hence it is OK if index == size
+    if(index > array_list->size){
+        printf("Index out of bounds");
+        exit(1);
+    }
+
+    if(array_list->capacity == array_list->size) {
+        extend_capacity(array_list);
+    }
+
+    // I want to avoid underflow of size_t so I will stop at 0
+    // instead of classic approach to -1
+    size_t destination_index = array_list->size;
+    while(destination_index > index) {
+        array_list->data[destination_index] =
+            array_list->data[destination_index - 1];
+        destination_index--;
+    }
+
+    array_list->data[index] = value;
+    array_list->size = array_list->size + 1;
 }
 
 void destroy(ArrayList *array_list) {
