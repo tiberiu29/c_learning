@@ -14,18 +14,19 @@ int main() {
        printf("POPPED%d\n", popped_value);
    }
 
-   printf("SIZE IS: %d\n", array_list->size);
-   printf("get element %d at index: %d\n", 
-           get(array_list, 9), 9);
-   
+   printf("SIZE IS: %zu\n", array_list->size);
+   print_array(array_list);
 
    //test underflow size_t not occuring
    add(array_list, 0, 999);
-   printf("Element added at index %d with shift: %d\n", 
-           0, array_list->data[0]);
-   printf("Array size increased post shift, found element %d at index %d\n", 
-           get(array_list, 10), 10);
+   printf("SIZE IS: %zu\n", array_list->size);
+   print_array(array_list);
    
+   remove_at(array_list, 0);
+   printf("SIZE IS: %zu\n", array_list->size);
+   print_array(array_list);
+
    destroy(array_list);
 
 }
+

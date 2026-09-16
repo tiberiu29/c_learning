@@ -18,6 +18,12 @@ void extend_capacity(ArrayList *array_list) {
     array_list->capacity = current_capacity_int * 2;
 }
 
+void print_array(ArrayList *array_list) {
+    for(int i = 0; i < array_list->size; i++) {
+        printf("Arr element: %d \n", get(array_list, i));
+    }
+}
+
 ArrayList *initialize(size_t initial_capacity) {
     int *data = malloc(initial_capacity * sizeof(int));
 
@@ -90,6 +96,27 @@ void add(ArrayList *array_list, size_t index, int value) {
 
     array_list->data[index] = value;
     array_list->size = array_list->size + 1;
+}
+
+void remove_at(ArrayList *array_list, size_t index) {
+    if(index >= array_list->size) {
+        printf("Index out of bounds");
+        exit(1);
+    }
+
+    //[5, 9, 4, 2]
+    //remove(3)
+
+    size_t starting_index = index;
+
+    while(starting_index < array_list ->size - 1) {
+       array_list->data[starting_index] = 
+           array_list->data[starting_index + 1];
+
+       starting_index++;
+    }
+    
+    array_list->size = array_list->size - 1;
 }
 
 void destroy(ArrayList *array_list) {
