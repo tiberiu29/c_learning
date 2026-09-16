@@ -104,9 +104,6 @@ void remove_at(ArrayList *array_list, size_t index) {
         exit(1);
     }
 
-    //[5, 9, 4, 2]
-    //remove(3)
-
     size_t starting_index = index;
 
     while(starting_index < array_list ->size - 1) {
