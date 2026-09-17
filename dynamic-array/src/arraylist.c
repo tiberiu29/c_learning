@@ -18,12 +18,6 @@ void extend_capacity(ArrayList *array_list) {
     array_list->capacity = current_capacity_int * 2;
 }
 
-void print_array(ArrayList *array_list) {
-    for(int i = 0; i < array_list->size; i++) {
-        printf("Arr element: %d \n", get(array_list, i));
-    }
-}
-
 ArrayList *initialize(size_t initial_capacity) {
     int *data = malloc(initial_capacity * sizeof(int));
 

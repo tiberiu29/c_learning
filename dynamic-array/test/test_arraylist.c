@@ -43,17 +43,18 @@ void test_remove_does_not_underflow(void) {
 void test_resize_works_properly(void) {
     // given
     int expected_array[] = {1, 2, 3, 4, 5, 6};
-    int expected_size = 6;
-    int expected_capacity = 10;
+    size_t expected_size = 6;
+    size_t expected_capacity = 10;
 
     // when
-    for(int i = 1; i <= expected_size; i++) {
+    for(size_t i = 1; i <= expected_size; i++) {
         push(subject, i);
     }
 
     // then
-    TEST_ASSERT_EQUAL_INT_ARRAY(expected_array, subject->data, 6);
-    TEST_ASSERT_EQUAL_INT(expected_capacity, subject->capacity);
+    TEST_ASSERT_EQUAL_INT_ARRAY(expected_array, subject->data, expected_size);
+    TEST_ASSERT_EQUAL_UINT(expected_size, subject->size);
+    TEST_ASSERT_EQUAL_UINT(expected_capacity, subject->capacity);
 }
 
 int main(void) {
