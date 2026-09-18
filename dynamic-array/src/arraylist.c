@@ -1,6 +1,7 @@
 #include "arraylist.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 void extend_capacity(ArrayList *array_list) {
     size_t current_capacity_int = array_list->capacity;
@@ -60,7 +61,6 @@ int pop(ArrayList *array_list) {
     return remove_at(array_list, index);
 }
 
-// I could have used memmove, but for learning purposes I did it manually
 void add(ArrayList *array_list, size_t index, int value) {
     // we can also append at the end of array
     // similar to a push, hence it is OK if index == size
@@ -73,15 +73,12 @@ void add(ArrayList *array_list, size_t index, int value) {
         extend_capacity(array_list);
     }
 
-    // I want to avoid underflow of size_t so I will stop at 0
-    // instead of classic approach to -1
-    size_t destination_index = array_list->size;
-    while(destination_index > index) {
-        array_list->data[destination_index] =
-            array_list->data[destination_index - 1];
-        destination_index--;
-    }
+    void * start_index = &array_list->data[index];
+    void * destination_index = &array_list->data[index + 1];
+    size_t bytes_to_move = (array_list->size - index) * sizeof(int);
 
+    memmove(destination_index, start_index, bytes_to_move);
+    
     array_list->data[index] = value;
     array_list->size = array_list->size + 1;
 }
@@ -92,14 +89,14 @@ int remove_at(ArrayList *array_list, size_t index) {
         exit(1);
     }
 
-    size_t starting_index = index;
-    int value_stored = get(array_list, starting_index);
+    int value_stored = get(array_list, index);
 
-    while(starting_index < array_list ->size - 1) {
-       array_list->data[starting_index] = 
-           array_list->data[starting_index + 1];
+    if(index != array_list->size - 1) {
+        void * start_index = &array_list->data[index + 1] ;
+        void * destination_index = &array_list->data[index];
+        size_t bytes_to_move = (array_list->size - index + 1) * sizeof(int);
 
-       starting_index++;
+        memmove(destination_index, start_index, bytes_to_move);
     }
     
     array_list->size = array_list->size - 1;
