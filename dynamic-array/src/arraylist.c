@@ -91,13 +91,11 @@ int remove_at(ArrayList *array_list, size_t index) {
 
     int value_stored = get(array_list, index);
 
-    if(index != array_list->size - 1) {
-        void * start_index = &array_list->data[index + 1] ;
-        void * destination_index = &array_list->data[index];
-        size_t bytes_to_move = (array_list->size - index + 1) * sizeof(int);
-
-        memmove(destination_index, start_index, bytes_to_move);
-    }
+    void * start_index = &array_list->data[index + 1] ;
+    void * destination_index = &array_list->data[index];
+    size_t bytes_to_move = (array_list->size - (index + 1)) * sizeof(int);
+    
+    memmove(destination_index, start_index, bytes_to_move);
     
     array_list->size = array_list->size - 1;
     return value_stored;
