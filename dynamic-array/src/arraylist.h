@@ -4,23 +4,24 @@
 #include <stddef.h>
 
 typedef struct {
-    int* data;
+    void* data;
     size_t size;
     size_t capacity;
+    size_t element_size_bytes;
 }ArrayList;
 
 
-ArrayList *initialize(size_t initial_capacity);
+ArrayList *initialize(size_t initial_capacity, size_t element_size_bytes);
 
-int get(ArrayList *array_list, size_t index);
+void *get(ArrayList *array_list, size_t index);
 
-void push(ArrayList *array_list, int number);
+void push(ArrayList *array_list, void *element);
 
-int pop(ArrayList *array_list);
+void *pop(ArrayList *array_list);
 
-void add(ArrayList *array_list, size_t index, int value);
+void add(ArrayList *array_list, size_t index, void *element);
 
-int remove_at(ArrayList *array_list, size_t index);
+void *remove_at(ArrayList *array_list, size_t index);
 
 void destroy(ArrayList *array_list);
 
