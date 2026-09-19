@@ -94,6 +94,7 @@ void add(ArrayList *array_list, size_t index, void *element) {
     array_list->size = array_list->size + 1;
 }
 
+//TODO: add shrinking logic if size < 1/2 capacity
 void *remove_at(ArrayList *array_list, size_t index) {
     if(index >= array_list->size) {
         printf("Index out of bounds");
