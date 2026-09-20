@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
-void *get_element_address(ArrayList *array_list, size_t offset){
+void *get_element_address(ArrayList *array_list, size_t index){
+    size_t offset = array_list->element_size_bytes * index;
     unsigned char * byte_pointer = ((unsigned char *) array_list -> data);
     return (void *) (byte_pointer + offset);
 }
@@ -55,8 +56,7 @@ void *get(ArrayList *array_list, size_t index) {
         exit(1);
     }
 
-    size_t offset = index * array_list->element_size_bytes;
-    return get_element_address(array_list, offset);
+    return get_element_address(array_list, index);
 }
 
 void push(ArrayList *array_list, void *element) {
@@ -80,12 +80,10 @@ void add(ArrayList *array_list, size_t index, void *element) {
         extend_capacity(array_list);
     }
 
-    size_t offset = array_list->element_size_bytes * index;
-
     void *source_address = 
-        get_element_address(array_list, offset);
+        get_element_address(array_list, index);
     void *destination_address =
-        get_element_address(array_list, offset + array_list->element_size_bytes);
+        get_element_address(array_list, index + 1);
     size_t bytes_to_move =
         (array_list->size - index) * array_list->element_size_bytes;
 
@@ -101,15 +99,14 @@ void *remove_at(ArrayList *array_list, size_t index) {
         exit(1);
     }
 
-    size_t offset = array_list->element_size_bytes * index;
     void *value_stored = get(array_list, index);
     void *value_new_address = malloc(array_list->element_size_bytes);
     memcpy(value_new_address, value_stored, array_list->element_size_bytes);
 
     void *start_index = 
-        get_element_address(array_list, offset + array_list->element_size_bytes);
+        get_element_address(array_list, index + 1);
     void *destination_index = 
-        get_element_address(array_list, offset);
+        get_element_address(array_list, index);
     size_t bytes_to_move = 
         (array_list->size - (index + 1)) * array_list->element_size_bytes;
     
