@@ -6,6 +6,7 @@ INCLUDES= -Isrc -I/workspace/unity
 
 test:
 	$(CC) $(CFLAGS) $(INCLUDES) \
+		src/hash_util.c \
 		src/hashmap.c \
 		../unity/unity.c \
 		test/test_hashmap.c \
