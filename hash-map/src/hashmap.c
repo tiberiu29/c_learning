@@ -43,6 +43,7 @@ HashMap *initialize() {
     return map;
 }
 
+//TODO: add load_factor
 void put(
     HashMap *map,
     void *key,
