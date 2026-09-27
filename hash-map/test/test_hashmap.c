@@ -12,23 +12,28 @@ void tearDown() {
 }
 
 
-void test_map_initialization() {
+void test_map_initialization_with_duplicate_key() {
+    // given
     int *key = malloc(sizeof(int));
     key[0] = 29;
-    int *val = malloc(sizeof(int));
-    val[0] = 12;
 
-    put(subject, key, sizeof(int), &joaat_hash, val);
+    int *val_1 = malloc(sizeof(int));
+    val_1[0] = 12;
+    int *val_2 = malloc(sizeof(int));
+    val_2[0] = 15;
 
-    Node node = *subject->nodes_array[0];
+    // when
+    put(subject, key, sizeof(int), &joaat_hash, val_1);
+    put(subject, key, sizeof(int), &joaat_hash, val_2 );
 
-    TEST_ASSERT_INT_WITHIN(0, 29, *((int*)node.key));
-    TEST_ASSERT_INT_WITHIN(0, 12, *((int*)node.val));
+    // then
+    int *found_val = get(subject, key, sizeof(int), &joaat_hash);
+    TEST_ASSERT_INT_WITHIN(0, *val_2, *found_val);
 }
 
 
 int main(void) {
     UNITY_BEGIN();
-    RUN_TEST(test_map_initialization);
+    RUN_TEST(test_map_initialization_with_duplicate_key);
     return UNITY_END();
 }

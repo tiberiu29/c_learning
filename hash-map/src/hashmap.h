@@ -13,8 +13,8 @@ typedef struct Node{
 
 typedef struct {
     Node **nodes_array;
-    size_t array_size;
-    size_t array_capacity;
+    size_t size;
+    size_t capacity;
 }HashMap;
 
 HashMap *initialize();
@@ -25,5 +25,11 @@ void put(
     size_t key_length,
     hash_function hash,
     void *val);
+
+void *get(
+    HashMap *map,
+    void *key,
+    size_t key_length,
+    hash_function hash);
 
 #endif
