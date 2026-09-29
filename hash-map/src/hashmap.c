@@ -1,9 +1,40 @@
 #include "hashmap.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
-const size_t INITIAL_CAPACITY = 10;
+const float LOAD_FACTOR = 0.75;
+
+
+void resize(
+        HashMap *map,
+        hash_function hash_function,
+        size_t key_length) {
+    size_t old_capacity = map->capacity;
+    size_t new_capacity = old_capacity * 2;
+    Node** resized_node_array = calloc(new_capacity, sizeof(Node*));
+
+    Node** old_node_array = map->nodes_array;
+
+    // update original map
+    map->nodes_array = resized_node_array;
+    map->size = 0;
+    map->capacity = new_capacity;
+          
+    for(size_t i = 0; i < old_capacity; i++) {
+        Node* current_node = old_node_array[i];
+        while(current_node != NULL) {
+            put(map, current_node->key, key_length, hash_function, current_node->val);
+            // need a temp before moving to next, otherwise I cannot free memory per node
+            Node* temp_node = current_node;
+            current_node = current_node->next;
+            free(temp_node);
+        }
+
+    }
+    free(old_node_array);
+}
 
 Node *initialize_node(void *key, void *val){
     Node *node = malloc(sizeof(Node));
@@ -20,7 +51,7 @@ Node *initialize_node(void *key, void *val){
     return node;
 }
 
-HashMap *initialize() {
+HashMap *initialize(size_t initial_size) {
     HashMap *map = malloc(sizeof(HashMap));
 
     if(map == NULL) {
@@ -29,7 +60,7 @@ HashMap *initialize() {
     }
 
     Node **node_array = 
-        calloc(INITIAL_CAPACITY, sizeof(Node*));
+        calloc(initial_size, sizeof(Node*));
 
     if(node_array == NULL) {
         printf("Cannot initialize Nodes");
@@ -38,12 +69,11 @@ HashMap *initialize() {
 
     map->nodes_array = node_array;
     map->size = 0;
-    map->capacity = INITIAL_CAPACITY;
+    map->capacity = initial_size;
 
     return map;
 }
 
-//TODO: add load_factor
 void put(
     HashMap *map,
     void *key,
@@ -51,6 +81,12 @@ void put(
     hash_function hash,
     void *val){
 
+    float load = map->size / map->capacity;
+
+    if(load > LOAD_FACTOR) {
+        resize(map, hash, key_length);
+    }
+    
     int bucket_index = hash(key, key_length) % (map->capacity);
 
     Node *bucket = map->nodes_array[bucket_index];

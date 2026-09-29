@@ -17,7 +17,7 @@ typedef struct {
     size_t capacity;
 }HashMap;
 
-HashMap *initialize();
+HashMap *initialize(size_t initial_size);
 
 void put(
     HashMap *map,
