@@ -32,6 +32,6 @@ void *get(
     size_t key_length,
     hash_function hash);
 
-//todo: add a destroy method
+void destroy(HashMap *map);
 
 #endif

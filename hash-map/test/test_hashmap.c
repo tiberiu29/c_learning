@@ -7,7 +7,7 @@ void setUp(void) {
 }
 
 void tearDown() {
-    //todo: add destroy
+    destroy(subject);
 }
 
 

@@ -6,7 +6,6 @@
 
 const float LOAD_FACTOR = 0.75;
 
-
 void resize(
         HashMap *map,
         hash_function hash_function,
@@ -81,7 +80,7 @@ void put(
     hash_function hash,
     void *val){
 
-    float load = map->size / map->capacity;
+    float load = (double) map->size / (double) map->capacity;
 
     if(load > LOAD_FACTOR) {
         resize(map, hash, key_length);
@@ -132,6 +131,21 @@ void *get(
     }
 
     return NULL;
+}
+
+void destroy(HashMap *map){
+    for(size_t i = 0; i < map->capacity; i++) {
+        Node *current = map->nodes_array[i];
+
+        while(current != NULL) {
+            Node *next = current->next;
+            free(current);
+            current = next;
+        }
+
+    }
+        free(map->nodes_array);
+        free(map);
 }
 
 
