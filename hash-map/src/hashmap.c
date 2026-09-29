@@ -80,7 +80,7 @@ void put(
     hash_function hash,
     void *val){
 
-    float load = (double) map->size / (double) map->capacity;
+    float load = (double) (map->size + 1) / map->capacity;
 
     if(load > LOAD_FACTOR) {
         resize(map, hash, key_length);
