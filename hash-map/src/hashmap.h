@@ -7,6 +7,7 @@ typedef size_t (*hash_function)(void *key, size_t length);
 
 typedef struct Node{
     void *key;
+    size_t key_length;
     void *val;
     struct Node *next;
 }Node;

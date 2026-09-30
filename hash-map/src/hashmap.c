@@ -6,13 +6,63 @@
 
 const float LOAD_FACTOR = 0.75;
 
+Node *initialize_node(void *key, void *val, size_t key_length){
+    Node *node = malloc(sizeof(Node));
+
+    if(node == NULL) {
+        printf("Node cannot be created");
+        exit(1);
+    }
+
+    node->key = key;
+    node->val = val;
+    node->key_length = key_length;
+    node->next = NULL;
+
+    return node;
+}
+
+void insert_node(
+        HashMap * map, 
+        void *key,
+        size_t key_length,
+        hash_function hash_function,
+        void *value) {
+
+    size_t bucket_index = hash_function(key, key_length) % map->capacity;
+    
+    Node *current = map->nodes_array[bucket_index];
+
+    if(current == NULL){
+        map->nodes_array[bucket_index] = initialize_node(key, value, key_length);
+        map->size = map->size + 1;
+    } else {
+        while(current != NULL) {
+            if(current->key == key) {
+                current->val = value;
+                return;
+            } else if(current->next == NULL) {
+                current->next = initialize_node(key, value, key_length);
+                map->size = map->size + 1;
+                return;
+            }
+            current = current->next;
+        }
+    }
+
+}
+
 void resize(
         HashMap *map,
-        hash_function hash_function,
-        size_t key_length) {
+        hash_function hash_function) {
     size_t old_capacity = map->capacity;
     size_t new_capacity = old_capacity * 2;
     Node** resized_node_array = calloc(new_capacity, sizeof(Node*));
+
+    if(resized_node_array == NULL) {
+        printf("Cannot resize map");
+        exit(1);
+    }
 
     Node** old_node_array = map->nodes_array;
 
@@ -24,7 +74,7 @@ void resize(
     for(size_t i = 0; i < old_capacity; i++) {
         Node* current_node = old_node_array[i];
         while(current_node != NULL) {
-            put(map, current_node->key, key_length, hash_function, current_node->val);
+            insert_node(map, current_node->key, current_node->key_length, hash_function, current_node->val);
             // need a temp before moving to next, otherwise I cannot free memory per node
             Node* temp_node = current_node;
             current_node = current_node->next;
@@ -35,20 +85,8 @@ void resize(
     free(old_node_array);
 }
 
-Node *initialize_node(void *key, void *val){
-    Node *node = malloc(sizeof(Node));
 
-    if(node == NULL) {
-        printf("Node cannot be created");
-        exit(1);
-    }
 
-    node->key = key;
-    node->val = val;
-    node->next = NULL;
-
-    return node;
-}
 
 HashMap *initialize(size_t initial_size) {
     HashMap *map = malloc(sizeof(HashMap));
@@ -80,33 +118,13 @@ void put(
     hash_function hash,
     void *val){
 
-    float load = (double) (map->size + 1) / map->capacity;
+    float load = (double) (map->size + 1) / (double) map->capacity;
 
     if(load > LOAD_FACTOR) {
-        resize(map, hash, key_length);
+        resize(map, hash);
     }
     
-    int bucket_index = hash(key, key_length) % (map->capacity);
-
-    Node *bucket = map->nodes_array[bucket_index];
-    if(bucket == NULL) {
-        map->nodes_array[bucket_index] = initialize_node(key, val);
-        map->size = map->size + 1;
-    } else {
-        Node *current_node = bucket;
-        while(current_node != NULL) {
-            if(current_node->key == key) {
-                current_node->val = val;
-                break;
-            }
-            if(current_node->next == NULL) {
-                current_node->next = initialize_node(key, val);
-                map->size = map->size + 1;
-            }
-
-            current_node = current_node->next;
-        }
-    }
+    insert_node(map, key, key_length, hash, val);
 }
 
 void *get(
