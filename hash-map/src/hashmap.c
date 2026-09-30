@@ -85,9 +85,6 @@ void resize(
     free(old_node_array);
 }
 
-
-
-
 HashMap *initialize(size_t initial_size) {
     HashMap *map = malloc(sizeof(HashMap));
 
@@ -165,5 +162,3 @@ void destroy(HashMap *map){
         free(map->nodes_array);
         free(map);
 }
-
-
