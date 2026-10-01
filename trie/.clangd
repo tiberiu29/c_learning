@@ -1,0 +1,4 @@
+CompileFlags:
+  Add:
+    - -I/workspace/trie/src
+    - -I/workspace/unity
