@@ -33,3 +33,11 @@ size_t joaat_hash(
   hash += hash << 15;
   return hash;
 }
+
+// a very simple reference equality function
+bool equals_reference(void *key_1, void *key_2) {
+    if(key_1 == key_2){
+        return true;
+    }
+    return false;
+}

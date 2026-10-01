@@ -27,6 +27,7 @@ void insert_node(
         void *key,
         size_t key_length,
         hash_function hash_function,
+        equality_function equality_function,
         void *value) {
 
     size_t bucket_index = hash_function(key, key_length) % map->capacity;
@@ -38,7 +39,7 @@ void insert_node(
         map->size = map->size + 1;
     } else {
         while(current != NULL) {
-            if(current->key == key) {
+            if(equality_function(current->key, key)) {
                 current->val = value;
                 return;
             } else if(current->next == NULL) {
@@ -54,7 +55,8 @@ void insert_node(
 
 void resize(
         HashMap *map,
-        hash_function hash_function) {
+        hash_function hash_function,
+        equality_function equality_function) {
     size_t old_capacity = map->capacity;
     size_t new_capacity = old_capacity * 2;
     Node** resized_node_array = calloc(new_capacity, sizeof(Node*));
@@ -74,7 +76,13 @@ void resize(
     for(size_t i = 0; i < old_capacity; i++) {
         Node* current_node = old_node_array[i];
         while(current_node != NULL) {
-            insert_node(map, current_node->key, current_node->key_length, hash_function, current_node->val);
+            insert_node(
+                    map, 
+                    current_node->key,
+                    current_node->key_length,
+                    hash_function,
+                    equality_function,
+                    current_node->val);
             // need a temp before moving to next, otherwise I cannot free memory per node
             Node* temp_node = current_node;
             current_node = current_node->next;
@@ -112,25 +120,27 @@ void put(
     HashMap *map,
     void *key,
     size_t key_length,
-    hash_function hash,
+    hash_function hash_function,
+    equality_function equality_function,
     void *val){
 
     float load = (double) (map->size + 1) / (double) map->capacity;
 
     if(load > LOAD_FACTOR) {
-        resize(map, hash);
+        resize(map, hash_function, equality_function);
     }
     
-    insert_node(map, key, key_length, hash, val);
+    insert_node(map, key, key_length, hash_function, equality_function, val);
 }
 
 void *get(
     HashMap *map,
     void *key,
     size_t key_length,
-    hash_function hash) {
+    hash_function hash_function,
+    equality_function equality_function) {
 
-    int bucket_index = hash(key, key_length) % map->capacity;
+    int bucket_index = hash_function(key, key_length) % map->capacity;
     Node *bucket = map->nodes_array[bucket_index];
 
     if(bucket == NULL) {
@@ -139,7 +149,7 @@ void *get(
 
     Node *current = bucket;
     while(current != NULL) {
-        if(current->key == key) {
+        if(equality_function(current->key, key)) {
             return current->val;
         }
         current = current->next;

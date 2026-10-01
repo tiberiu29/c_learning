@@ -24,12 +24,12 @@ void test_insert_string_keys() {
     *val_2 = 99;
 
     // when
-    put(subject, key_1, sizeof(key_1), &djb2_hash, val_1);
-    put(subject, key_2, sizeof(key_2), &djb2_hash, val_2);
+    put(subject, key_1, sizeof(key_1), &djb2_hash, &equals_reference, val_1);
+    put(subject, key_2, sizeof(key_2), &djb2_hash, &equals_reference, val_2);
 
     // then
-    int *found_val_1 = get(subject, key_1, sizeof(key_1), &djb2_hash);
-    int *found_val_2 = get(subject, key_2, sizeof(key_2), &djb2_hash);
+    int *found_val_1 = get(subject, key_1, sizeof(key_1), &djb2_hash, &equals_reference);
+    int *found_val_2 = get(subject, key_2, sizeof(key_2), &djb2_hash, &equals_reference);
 
     TEST_ASSERT_INT_WITHIN(0, *val_1, *found_val_1);
     TEST_ASSERT_INT_WITHIN(0, *val_2, *found_val_2);
@@ -47,11 +47,11 @@ void test_map_initialization_with_duplicate_key() {
     val_2[0] = 15;
 
     // when
-    put(subject, key, sizeof(int), &joaat_hash, val_1);
-    put(subject, key, sizeof(int), &joaat_hash, val_2 );
+    put(subject, key, sizeof(int), &joaat_hash, &equals_reference, val_1);
+    put(subject, key, sizeof(int), &joaat_hash, &equals_reference, val_2 );
 
     // then
-    int *found_val = get(subject, key, sizeof(int), &joaat_hash);
+    int *found_val = get(subject, key, sizeof(int), &joaat_hash, &equals_reference);
     TEST_ASSERT_INT_WITHIN(0, *val_2, *found_val);
 }
 
@@ -74,16 +74,16 @@ void test_resize() {
     val_3[0] = 8879;
 
     // when
-    put(subject, key_1, sizeof(int), &joaat_hash, val_1);
-    put(subject, key_2, sizeof(int), &joaat_hash, val_2);
-    put(subject, key_3, sizeof(int), &joaat_hash, val_3);
+    put(subject, key_1, sizeof(int), &joaat_hash, &equals_reference, val_1);
+    put(subject, key_2, sizeof(int), &joaat_hash, &equals_reference,val_2);
+    put(subject, key_3, sizeof(int), &joaat_hash, &equals_reference, val_3);
 
     //then
-    int *found_val_1 = get(subject, key_1, sizeof(int), &joaat_hash);
+    int *found_val_1 = get(subject, key_1, sizeof(int), &joaat_hash, &equals_reference);
     TEST_ASSERT_INT_WITHIN(0, *val_1, *found_val_1);
-    int *found_val_2 = get(subject, key_2, sizeof(int), &joaat_hash);
+    int *found_val_2 = get(subject, key_2, sizeof(int), &joaat_hash, &equals_reference);
     TEST_ASSERT_INT_WITHIN(0, *val_2, *found_val_2);
-    int *found_val_3 = get(subject, key_3, sizeof(int), &joaat_hash);
+    int *found_val_3 = get(subject, key_3, sizeof(int), &joaat_hash, &equals_reference);
     TEST_ASSERT_INT_WITHIN(0, *val_3, *found_val_3);
 
     TEST_ASSERT_INT_WITHIN(0, 4, subject->capacity);
