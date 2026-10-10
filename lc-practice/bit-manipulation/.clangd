@@ -1,0 +1,4 @@
+CompileFlags:
+  Add:
+    - -I/workspace/lc-practice/bit-manipulation/src
+    - -I/workspace/unity
