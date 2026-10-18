@@ -1,11 +1,18 @@
 #include "number_complement.h"
 #include "reverse_bits.h"
+#include "hamming_weight.h"
 #include "unity.h"
 
 void setUp(void) {
 }
 
 void tearDown() {
+}
+
+void test_hamming_weight() {
+    TEST_ASSERT_INT_WITHIN(0, 3, hammingWeight(11));
+    TEST_ASSERT_INT_WITHIN(0, 1, hammingWeight(128));
+    TEST_ASSERT_INT_WITHIN(0, 30, hammingWeight(2147483645));
 }
 
 void test_num_complement() {
@@ -22,5 +29,6 @@ int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_num_complement);
     RUN_TEST(test_reverse_bits);
+    RUN_TEST(test_hamming_weight);
     return UNITY_END();
 }
