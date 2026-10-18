@@ -1,6 +1,7 @@
 #include "number_complement.h"
 #include "reverse_bits.h"
 #include "hamming_weight.h"
+#include "power_of_two.h"
 #include "unity.h"
 
 void setUp(void) {
@@ -9,6 +10,12 @@ void setUp(void) {
 void tearDown() {
 }
 
+void test_power_of_two(){
+    TEST_ASSERT_INT_WITHIN(0, true, isPowerOfTwo(1));
+    TEST_ASSERT_INT_WITHIN(0, true, isPowerOfTwo(16));
+    TEST_ASSERT_INT_WITHIN(0, false, isPowerOfTwo(3));
+    TEST_ASSERT_INT_WITHIN(0, false, isPowerOfTwo(0));
+}
 void test_hamming_weight() {
     TEST_ASSERT_INT_WITHIN(0, 3, hammingWeight(11));
     TEST_ASSERT_INT_WITHIN(0, 1, hammingWeight(128));
@@ -30,5 +37,6 @@ int main(void) {
     RUN_TEST(test_num_complement);
     RUN_TEST(test_reverse_bits);
     RUN_TEST(test_hamming_weight);
+    RUN_TEST(test_power_of_two);
     return UNITY_END();
 }
