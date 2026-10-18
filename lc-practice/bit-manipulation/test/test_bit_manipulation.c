@@ -2,12 +2,18 @@
 #include "reverse_bits.h"
 #include "hamming_weight.h"
 #include "power_of_two.h"
+#include "alternating_bits.h"
 #include "unity.h"
 
 void setUp(void) {
 }
 
 void tearDown() {
+}
+
+void test_alternating_bits(){
+    TEST_ASSERT_INT_WITHIN(0, true, hasAlternatingBits(5));
+    TEST_ASSERT_INT_WITHIN(0, false, hasAlternatingBits(11));
 }
 
 void test_power_of_two(){
@@ -38,5 +44,6 @@ int main(void) {
     RUN_TEST(test_reverse_bits);
     RUN_TEST(test_hamming_weight);
     RUN_TEST(test_power_of_two);
+    RUN_TEST(test_alternating_bits);
     return UNITY_END();
 }
