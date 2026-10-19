@@ -63,10 +63,10 @@ void append_char(StringBuilder *sb, char c){
 }
 
 void append_int(StringBuilder *sb, int n){
-    size_t buffer_size = sizeof(n) * 8;
-    char buffer[buffer_size];
+    size_t required_buffer_size = snprintf(NULL, 0, "%d", n) + 1;
+    char buffer[required_buffer_size];
 
-    int written_chars = snprintf(buffer, buffer_size, "%d", n);
+    int written_chars = snprintf(buffer, required_buffer_size, "%d", n);
 
     for(int i = 0; i < written_chars; i++) {
         append_char(sb, buffer[i]);
