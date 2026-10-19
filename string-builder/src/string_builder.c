@@ -12,7 +12,6 @@ typedef struct StringBuilder{
    size_t capacity;
 }StringBuilder;
 
-
 char *buffer_initialize(size_t size) {
     char *buffer = malloc(size);
 
@@ -83,6 +82,27 @@ char *to_string(StringBuilder *sb){
     memcpy(string, sb->string, sb->size);
     string[sb->size] = '\0';
     return string;
+}
+
+void remove_last(StringBuilder *sb) {
+    if(sb->size == 0) {
+        return;
+    }
+
+    sb->size--;
+}
+
+void remove_at(StringBuilder *sb, size_t index){
+    if(index > sb->size) {
+        return;
+    }
+
+    // [a, b, c]
+    memmove(sb->string + index, 
+            sb->string + (index + 1),
+            sb->size - (index + 1));
+
+    sb->size--;
 }
 
 void sb_clear(StringBuilder *sb) {

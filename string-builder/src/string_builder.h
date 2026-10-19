@@ -10,4 +10,6 @@ char *to_string(StringBuilder *sb);
 size_t get_size(StringBuilder *sb);
 void sb_clear(StringBuilder *sb);
 void sb_destroy(StringBuilder *sb);
+void remove_last(StringBuilder *sb);
+void remove_at(StringBuilder *sb, size_t index);
 #endif
