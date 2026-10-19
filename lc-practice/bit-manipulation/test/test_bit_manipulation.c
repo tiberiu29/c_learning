@@ -2,6 +2,7 @@
 #include "reverse_bits.h"
 #include "hamming_weight.h"
 #include "power_of_two.h"
+#include "hamming_distance.h"
 #include "alternating_bits.h"
 #include "unity.h"
 
@@ -9,6 +10,14 @@ void setUp(void) {
 }
 
 void tearDown() {
+}
+
+void test_hamming_distance() {
+    TEST_ASSERT_INT_WITHIN(0, 2, hammingDistance(93, 73));
+    TEST_ASSERT_INT_WITHIN(0, 2, hammingDistance(1, 4));
+    TEST_ASSERT_INT_WITHIN(0, 2, hammingDistance(4, 1));
+    TEST_ASSERT_INT_WITHIN(0, 1, hammingDistance(1, 3));
+    TEST_ASSERT_INT_WITHIN(0, 1, hammingDistance(3, 1));
 }
 
 void test_alternating_bits(){
@@ -45,5 +54,6 @@ int main(void) {
     RUN_TEST(test_hamming_weight);
     RUN_TEST(test_power_of_two);
     RUN_TEST(test_alternating_bits);
+    RUN_TEST(test_hamming_distance);
     return UNITY_END();
 }
