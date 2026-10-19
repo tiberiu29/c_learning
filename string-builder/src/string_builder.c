@@ -63,14 +63,16 @@ void append_char(StringBuilder *sb, char c){
 }
 
 void append_int(StringBuilder *sb, int n){
-    size_t required_buffer_size = snprintf(NULL, 0, "%d", n) + 1;
-    char buffer[required_buffer_size];
-
-    int written_chars = snprintf(buffer, required_buffer_size, "%d", n);
-
-    for(int i = 0; i < written_chars; i++) {
-        append_char(sb, buffer[i]);
+    size_t length = snprintf(NULL, 0, "%d", n) + 1;
+    if(sb->size + length >= sb->capacity) {
+        resize_buffer(sb, RESIZE_BUFFER_FACTOR);
     }
+
+    snprintf(sb->string + sb->size, length, "%d", n);
+    // snprintf always adds NULL character at end
+    // current StringBuilder design does not use NULL terminated characters
+    // hence the size will be - 1
+    sb->size = sb->size + (length - 1);
 }
 
 char *to_string(StringBuilder *sb){
